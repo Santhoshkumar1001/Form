@@ -1,12 +1,29 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { TasksContext } from './context/TaskContext';
 
 function MyVerticallyCenteredModal(props) { 
+  const{state,dispatch} = useContext(TasksContext)
+  const {selectedTask} = state
     const[title,setTitle]= useState('')
    const[description,setDescription] = useState('')
+   const [id, setId] = useState(0)
+
+useEffect(()=>
+{
+  if (Object.keys(selectedTask).length !==0){
+    setTitle(selectedTask.title)
+    setDescription(selectedTask.description)
+    setId(selectedTask.id)
+  }
+ 
+},[selectedTask])
+     
+
     const updateTask = () => {
         props.onHide()
+        dispatch({type:'UPDATE_TASK',payload:{title,description,id}})
     }
   return (
     <Modal
